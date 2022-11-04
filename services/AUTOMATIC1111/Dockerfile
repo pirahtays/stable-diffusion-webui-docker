@@ -70,6 +70,12 @@ git reset --hard ${SHA}
 pip install -r requirements_versions.txt
 EOF
 
+RUN <<EOF
+sed -i 's@gpu_call).*@gpu_call) \n        demo.queue(concurrency_count=111500)@' ${ROOT}/webui.py
+sed -i 's@css = "".*@with open(os.path.join(script_path, "style.css"), "r", encoding="utf8") as file:\n        css = file.read()@' ${ROOT}/modules/ui.py
+sed -i 's@min-height: 4.*@min-height: 5.5em;@g' ${ROOT}/style.css  
+EOF
+
 RUN pip install opencv-python-headless \
   git+https://github.com/TencentARC/GFPGAN.git@8d2447a2d918f8eba5a4a01463fd48e45126a379 \
   git+https://github.com/openai/CLIP.git@d50d76daa670286dd6cacf3bcd80b5e4823fc8e1 \
